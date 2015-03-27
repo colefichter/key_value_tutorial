@@ -37,10 +37,11 @@ server_loop(Dict) ->
             Client ! {hash, Hash},
             server_loop(Dict2);
         {lookup, K, Client} ->
-            case dict:find(K, Dict) of
-                {ok, Value} -> Client ! {value, Value};
-                error       -> Client ! {value, not_found}
+            Reply = case dict:find(K, Dict) of
+                {ok, Value} -> Value;
+                error       -> not_found
             end,
+            Client ! {value, Value}
             server_loop(Dict);
         {delete, K, Client} ->
             Dict2 = case dict:is_key(K, Dict) of
