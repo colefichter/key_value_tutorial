@@ -41,7 +41,7 @@ server_loop(Dict) ->
                 {ok, Value} -> Value;
                 error       -> not_found
             end,
-            Client ! {value, Value}
+            Client ! {value, Reply},
             server_loop(Dict);
         {delete, K, Client} ->
             Dict2 = case dict:is_key(K, Dict) of
